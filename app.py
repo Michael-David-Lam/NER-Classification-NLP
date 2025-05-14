@@ -4,8 +4,6 @@ import gradio as gr
 import datetime
 import os
 
-label_mapping = ["B-AC", "B-LF", "I-LF" "O"] # list index value = label id {"B-AC": 0, "B-LF": 1, "I-LF": 2, "O": 3}
-
 # define transformers pipeline
 ner_pipeline = pipeline(model="mdlam/distilbert-ner-classification",
                       tokenizer="mdlam/distilbert-ner-classification")
@@ -19,11 +17,14 @@ log_file_path = "ner_log.txt"
 # define interaction log array
 interaction_log = []
 
+label_mapping = {"LABEL_0": "B-AC", "LABEL_1": "B-LF", "LABEL_2": "I-LF", "LABEL_3": "O"}
+
 def ner_predict(text):
     output = ner_pipeline(text)
     # Format the output for HighlightedText
     highlighted_text = [
-        (text[ent['start']:ent['end']], ent['entity']) for ent in output
+        (text[ent['start']:ent['end']], label_mapping.get(ent['entity'], ent['entity'])) 
+        for ent in output
     ]
     # log_input = {
     #         "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
