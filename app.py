@@ -27,8 +27,7 @@ def ner_predict(text):
         for ent in output
     ]
 
-
-    # log_input = "hi"
+    # define timestamp and append interactions
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     interaction_log.append(
         f"[{timestamp}]\nInput: {text}\nOutput: {highlighted_text}\n\n"
@@ -36,6 +35,7 @@ def ner_predict(text):
 
     return highlighted_text
 
+# Create the local file to be downloaded
 def create_log():
     if not os.path.exists(log_file_path):
         with open(log_file_path, "w") as file:
@@ -45,7 +45,9 @@ def create_log():
          with open(log_file_path, "w") as file:
             file.writelines(interaction_log)
 
+    return log_file_path
 
+# Gradio UI Blocks Interface
 with gr.Blocks() as demo:
     with gr.Row():
       with gr.Column():
@@ -54,7 +56,6 @@ with gr.Blocks() as demo:
         gr.Examples(examples, input_box)
       with gr.Column():
           output_box = gr.HighlightedText(label="Entities")
-
           log_button = gr.Button("Generate Log")
           log_file_output = gr.File(label="Dowload Log")
 
