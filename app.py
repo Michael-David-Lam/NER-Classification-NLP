@@ -44,7 +44,7 @@ def create_log():
          os.remove("ner_log.txt")
          with open(log_file_path, "w") as file:
             file.writelines(interaction_log)
-
+    interaction_log.clear()
     return log_file_path
 
 # Gradio UI Blocks Interface
