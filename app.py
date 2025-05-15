@@ -40,8 +40,11 @@ def create_log():
     if not os.path.exists(log_file_path):
         with open(log_file_path, "w") as file:
             file.writelines(interaction_log)
+    else:
+         os.remove("ner_log.txt")
+         with open(log_file_path, "w") as file:
+            file.writelines(interaction_log)
 
-    return log_file_path
 
 with gr.Blocks() as demo:
     with gr.Row():
